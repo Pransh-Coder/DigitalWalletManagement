@@ -7,6 +7,7 @@ class WalletRepository  {
     //3. Account Statement/Transaction History
     //4. Balance Wallet Overview
 
+    //Int -- AccountNumber
     private val walletHashMap : HashMap<Int,Account> = HashMap()
 
     fun createWallet(name:String, amount:Double) {
@@ -37,7 +38,10 @@ class WalletRepository  {
 
         println("Account objs before transfer fromAccountObj = $fromAccountObj || toAccountObj = $toAccountObj")
 
+        //subtract money from FROM_ACCOUNT wallet account
         val fromLeftAccountBalance = fromAccountObj?.currentBalance?.minus(amount)
+
+        //add the money to TO_ACCOUNT wallet account
         val toNewAccountBalance = toAccountObj?.currentBalance?.plus(amount)
 
         //updating the hashMap with updated balance
@@ -60,7 +64,6 @@ class WalletRepository  {
     }
 
     private fun validateInputs(fromAccNum: Int, toAccNum: Int, enteredAmount: Double): Boolean{
-        val fromAccObj = walletHashMap.get(fromAccNum)
         if (fromAccNum == toAccNum){
             println("Cannot transfer money to same accounts!")
             return false
@@ -73,15 +76,18 @@ class WalletRepository  {
             println("Enter correct account number!")
             return false
         }
+        val fromAccObj = walletHashMap.get(fromAccNum)
         if (fromAccObj?.currentBalance!! < enteredAmount){
             println("Current wallet balance is lower than $enteredAmount!")
             return false
         }
-        //---------
+        //--------- I had forgotten these---------------
         if (walletHashMap.containsKey(fromAccNum).not()){
+            println("Incorrect From Account Number")
             return false
         }
         if (walletHashMap.containsKey(toAccNum).not()){
+            println("Incorrect To Account Number")
             return false
         }
 
